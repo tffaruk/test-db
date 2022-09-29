@@ -38,7 +38,7 @@ testimonialHandler.get("/", async (req, res) => {
 
 // Update field
 testimonialHandler.patch("/update/:id", async (req, res) => {
-  Testimonial.updateOne(
+  Testimonial.updateMany(
     { _id: req.params.id },
 
     {
