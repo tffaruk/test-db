@@ -1,10 +1,12 @@
 const express = require("express");
+const dbConnect = require("./dbConnect");
 const Testimonial = require("./testimonialModel");
 const testimonialHandler = express.Router();
 
 require("dotenv").config();
 
 testimonialHandler.post("/", async (req, res) => {
+  await dbConnect();
   const newData = new Testimonial(req.body);
   newData.save(req.body, (error) => {
     if (error) {
@@ -21,6 +23,7 @@ testimonialHandler.post("/", async (req, res) => {
 });
 
 testimonialHandler.get("/", async (req, res) => {
+  await dbConnect();
   await Testimonial.find({}).exec((err, data) => {
     if (err) {
       res.status(500).json({
@@ -38,7 +41,8 @@ testimonialHandler.get("/", async (req, res) => {
 
 // Update field
 testimonialHandler.patch("/update/:id", async (req, res) => {
-  Testimonial.updateMany(
+  await dbConnect();
+  Testimonial.updateOne(
     { _id: req.params.id },
 
     {

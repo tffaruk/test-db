@@ -1,8 +1,10 @@
 const express = require("express");
+const dbConnect = require("./dbConnect");
 const Showcase = require("./showcaseModel");
 const showcaseHandler = express.Router();
 
-showcaseHandler.post("/", (req, res) => {
+showcaseHandler.post("/", async (req, res) => {
+  await dbConnect();
   const newData = new Showcase(req.body);
   newData.save(req.body, (err) => {
     if (err) {
@@ -34,7 +36,8 @@ showcaseHandler.get("/", async (req, res) => {
   });
 });
 showcaseHandler.patch("/update/:id", async (req, res) => {
-  Showcase.updateMany(
+  await dbConnect();
+  Showcase.updateOne(
     { _id: req.params.id },
 
     {
@@ -58,6 +61,7 @@ showcaseHandler.patch("/update/:id", async (req, res) => {
 });
 // add a new field
 showcaseHandler.put("/update", async (req, res) => {
+  await dbConnect();
   console.log(req.body);
   await Showcase.updateMany(
     {},
