@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
+const testimonialHandler = require("./testimonialRouter");
 
 const showcaseHandler = require("./showcaseRouter");
 
@@ -27,3 +28,4 @@ app.get("/", (req, res) => {
 app.listen(process.env.PORT || port);
 
 app.use("/showcase", showcaseHandler);
+app.use("/testimonial", testimonialHandler);
