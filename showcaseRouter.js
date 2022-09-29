@@ -34,7 +34,7 @@ showcaseHandler.get("/", async (req, res) => {
   });
 });
 showcaseHandler.patch("/update/:id", async (req, res) => {
-  Showcase.updateOne(
+  Showcase.updateMany(
     { _id: req.params.id },
 
     {
