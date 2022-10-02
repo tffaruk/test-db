@@ -68,28 +68,69 @@ showcaseHandler.put("/update", async (req, res) => {
 
   // console.log(req.body.draft);
 
-  await Showcase.updateMany(
-    { _id: req.body.id },
+  // await Showcase.updateMany(
+  //   { _id: req.body.id },
 
-    {
-      $set: {
-        weight: req.body.weight,
-        draft: req.body.draft,
+  //   // {
+  //   //   $set: {
+  //   //     weight: req.body.weight,
+  //   //     draft: req.body.draft,
+  //   //   },
+  //   // },
+  //   (err) => {
+  //     if (err) {
+  //       res.status(500).json({
+  //         error: "the server side error",
+  //       });
+  //     } else {
+  //       res.status(200).json({
+  //         message: "data update succesfully",
+  //       });
+  //     }
+  //   }
+  // ).clone();
+
+  await Showcase.bulkWrite(
+    [
+      {
+        updateOne: {
+          filter: { _id: req.body.id },
+          update: {
+            $set: {
+              weight: req.body.weight,
+              draft: req.body.draft,
+            },
+          },
+        },
       },
-    },
-    (err) => {
+    ],
+    function (err, result) {
       if (err) {
-        res.status(500).json({
-          error: "the server side error",
-        });
+        res.send(err);
       } else {
-        res.status(200).json({
-          message: "data update succesfully",
-        });
+        res.send(result);
       }
     }
-  ).clone();
+  );
 });
+
+// myteam.bulkWrite(
+//   [
+
+//     {
+//       updateOne: {
+//         filter: { name: "Eden Hazard" },
+//         update: {
+//           $set: {
+//             country: "Belgium"
+//           }
+//         }
+//       }
+//     },
+
+//   ]
+// );
+
 // add a new field
 
 module.exports = showcaseHandler;
