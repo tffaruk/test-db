@@ -38,36 +38,29 @@ showcaseHandler.get("/", async (req, res) => {
 showcaseHandler.patch("/update/:id", async (req, res) => {
   await dbConnect();
 
-  await Showcase.findOne({ _id: req.params.id, weight: req.body.weight }).exec(
-    (err, data) => {
-      if (data) {
-        console.log("This has already been saved");
-      } else {
-        Showcase.updateOne(
-          { _id: req.params.id },
+  await Showcase.updateOne(
+    { _id: req.params.id },
 
-          {
-            $set: {
-              weight: req.body.weight,
-              draft: req.body.draft,
-            },
-          },
-          (err) => {
-            if (err) {
-              res.status(500).json({
-                error: "the server side error",
-              });
-            } else {
-              res.status(200).json({
-                message: "data update succesfully",
-              });
-            }
-          }
-        ).clone();
+    {
+      $set: {
+        weight: req.body.weight,
+        draft: req.body.draft,
+      },
+    },
+    (err) => {
+      if (err) {
+        res.status(500).json({
+          error: "the server side error",
+        });
+      } else {
+        res.status(200).json({
+          message: "data update succesfully",
+        });
       }
     }
-  );
+  ).clone();
 });
+
 // add a new field
 
 module.exports = showcaseHandler;
