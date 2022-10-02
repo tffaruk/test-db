@@ -60,26 +60,5 @@ showcaseHandler.patch("/update/:id", async (req, res) => {
   ).clone();
 });
 // add a new field
-showcaseHandler.put("/update", async (req, res) => {
-  await dbConnect();
-  console.log(req.body);
-  await Showcase.updateMany(
-    {},
-    {
-      $set: { weight: req.body.weight },
-    },
-    (err) => {
-      if (err) {
-        res.status(500).json({
-          error: "the server side error",
-        });
-      } else {
-        res.status(200).json({
-          message: "data update succesfully",
-        });
-      }
-    }
-  ).clone();
-});
 
 module.exports = showcaseHandler;
