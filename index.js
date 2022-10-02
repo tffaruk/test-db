@@ -7,8 +7,6 @@ const testimonialHandler = require("./testimonialRouter");
 
 const showcaseHandler = require("./showcaseRouter");
 
-const dbConnect = require("./dbConnect");
-
 require("dotenv").config();
 app.use(cors());
 app.use(express.json());
