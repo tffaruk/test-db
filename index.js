@@ -23,7 +23,7 @@ const port = 7003;
 //   .catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Hello");
 });
 app.listen(process.env.PORT || port);
 
