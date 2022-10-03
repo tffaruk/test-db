@@ -35,6 +35,7 @@ showcaseHandler.get("/", async (req, res) => {
     }
   });
 });
+
 showcaseHandler.patch("/update/:id", async (req, res) => {
   await dbConnect();
   var bulkOp = Showcase.initializeUnorderedBulkOp();
@@ -66,52 +67,52 @@ showcaseHandler.patch("/update/:id", async (req, res) => {
 showcaseHandler.put("/update", async (req, res) => {
   await dbConnect();
 
-  // console.log(req.body.draft);
+  console.log(req.body.draft);
 
-  // await Showcase.updateMany(
-  //   { _id: req.body.id },
+  await Showcase.updateMany(
+    {},
 
-  //   // {
-  //   //   $set: {
-  //   //     weight: req.body.weight,
-  //   //     draft: req.body.draft,
-  //   //   },
-  //   // },
-  //   (err) => {
-  //     if (err) {
-  //       res.status(500).json({
-  //         error: "the server side error",
-  //       });
-  //     } else {
-  //       res.status(200).json({
-  //         message: "data update succesfully",
-  //       });
-  //     }
-  //   }
-  // ).clone();
-
-  await Showcase.bulkWrite(
-    [
-      {
-        updateOne: {
-          filter: { _id: req.body.id },
-          update: {
-            $set: {
-              weight: req.body.weight,
-              draft: req.body.draft,
-            },
-          },
-        },
+    {
+      $set: {
+        weight: req.body.weight,
+        draft: req.body.draft,
       },
-    ],
-    function (err, result) {
+    },
+    (err) => {
       if (err) {
-        res.send(err);
+        res.status(500).json({
+          error: "the server side error",
+        });
       } else {
-        res.send(result);
+        res.status(200).json({
+          message: "data update succesfully",
+        });
       }
     }
-  );
+  ).clone();
+
+  // await Showcase.bulkWrite(
+  //   [
+  //     {
+  //       updateMany: {
+  //         filter: { _id: req.body.id },
+  //         update: {
+  //           $set: {
+  //             weight: req.body.weight,
+  //             draft: req.body.draft,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   ],
+  //   function (err, result) {
+  //     if (err) {
+  //       res.send(err);
+  //     } else {
+  //       res.send(result);
+  //     }
+  //   }
+  // );
 });
 
 // myteam.bulkWrite(
