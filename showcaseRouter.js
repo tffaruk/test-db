@@ -3,12 +3,14 @@ const dbConnect = require("./dbConnect");
 const Showcase = require("./showcaseModel");
 const showcaseHandler = express.Router();
 
+require("dotenv").config();
+
 showcaseHandler.post("/", async (req, res) => {
   await dbConnect();
   const newData = new Showcase(req.body);
-  newData.save(req.body, (err) => {
-    if (err) {
-      console.log(err);
+  newData.save(req.body, (error) => {
+    if (error) {
+      console.log(error);
       res.status(500).json({
         error: "There is server side error",
       });
@@ -21,6 +23,7 @@ showcaseHandler.post("/", async (req, res) => {
 });
 
 showcaseHandler.get("/", async (req, res) => {
+  await dbConnect();
   await Showcase.find({}).exec((err, data) => {
     if (err) {
       res.status(500).json({
@@ -36,10 +39,10 @@ showcaseHandler.get("/", async (req, res) => {
   });
 });
 
+// Update field
 showcaseHandler.patch("/update/:id", async (req, res) => {
   await dbConnect();
-
-  await Showcase.updateOne(
+  Showcase.updateOne(
     { _id: req.params.id },
 
     {
@@ -61,6 +64,8 @@ showcaseHandler.patch("/update/:id", async (req, res) => {
     }
   ).clone();
 });
+
+module.exports = showcaseHandler;
 
 // showcaseHandler.put("/update", async (req, res) => {
 //   await dbConnect();

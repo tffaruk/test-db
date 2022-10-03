@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+
     "start:dev": "nodemon index.js",
     "start": "node index"
   },
@@ -16,8 +16,6 @@
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "mongoose": "^6.6.0",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.20"
   }
-
- 
 }
