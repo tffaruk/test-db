@@ -38,30 +38,28 @@ showcaseHandler.get("/", async (req, res) => {
 
 showcaseHandler.patch("/update/:id", async (req, res) => {
   await dbConnect();
-  var bulkOp = Showcase.initializeUnorderedBulkOp();
-  await bulkOp
-    .updateOne(
-      { _id: req.params.id },
 
-      {
-        $set: {
-          weight: req.body.weight,
-          draft: req.body.draft,
-        },
+  await Showcase.updateOne(
+    { _id: req.params.id },
+
+    {
+      $set: {
+        weight: req.body.weight,
+        draft: req.body.draft,
       },
-      (err) => {
-        if (err) {
-          res.status(500).json({
-            error: "the server side error",
-          });
-        } else {
-          res.status(200).json({
-            message: "data update succesfully",
-          });
-        }
+    },
+    (err) => {
+      if (err) {
+        res.status(500).json({
+          error: "the server side error",
+        });
+      } else {
+        res.status(200).json({
+          message: "data update succesfully",
+        });
       }
-    )
-    .clone();
+    }
+  ).clone();
 });
 
 showcaseHandler.put("/update", async (req, res) => {
