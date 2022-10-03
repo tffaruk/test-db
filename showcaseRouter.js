@@ -40,29 +40,59 @@ showcaseHandler.get("/", async (req, res) => {
 });
 
 // Update field
-showcaseHandler.patch("/update/:id", async (req, res) => {
-  await dbConnect();
-  Showcase.updateOne(
-    { _id: req.params.id },
+// showcaseHandler.put("/update", async (req, res) => {
+//   console.log(req.body);
+//   await dbConnect();
+//   req.body.draftData.map((data, i) =>
+//     Showcase.updateOne(
+//       { _id: data._id },
 
-    {
-      $set: {
-        weight: req.body.weight,
-        draft: req.body.draft,
+//       {
+//         $set: {
+//           weight: i,
+//           draft: data.draft,
+//         },
+//       },
+//       (err) => {
+//         if (err) {
+//           res.status(500).json({
+//             error: "the server side error",
+//           });
+//         } else {
+//           res.status(200).json({
+//             message: "data update succesfully",
+//           });
+//         }
+//       }
+//     ).clone()
+//   );
+// });
+showcaseHandler.put("/update", async (req, res) => {
+  await dbConnect();
+
+  const dataArray = req.body.draftData.map((data) => {
+    return {
+      updateOne: {
+        filter: { _id: data._id },
+        update: {
+          $set: {
+            weight: data.weight,
+            draft: data.draft,
+          },
+        },
       },
-    },
-    (err) => {
-      if (err) {
-        res.status(500).json({
-          error: "the server side error",
-        });
-      } else {
-        res.status(200).json({
-          message: "data update succesfully",
-        });
-      }
+    };
+  });
+  console.log(dataArray);
+
+  await Showcase.bulkWrite(dataArray, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      console.log(result);
+      res.send(result);
     }
-  ).clone();
+  });
 });
 
 module.exports = showcaseHandler;

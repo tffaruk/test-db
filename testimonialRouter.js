@@ -65,4 +65,32 @@ testimonialHandler.patch("/update/:id", async (req, res) => {
   ).clone();
 });
 
+testimonialHandler.put("/update", async (req, res) => {
+  await dbConnect();
+
+  const dataArray = req.body.draftData.map((data) => {
+    return {
+      updateOne: {
+        filter: { _id: data._id },
+        update: {
+          $set: {
+            weight: data.weight,
+            draft: data.draft,
+          },
+        },
+      },
+    };
+  });
+  console.log(dataArray);
+
+  await Testimonial.bulkWrite(dataArray, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
+});
+
 module.exports = testimonialHandler;
