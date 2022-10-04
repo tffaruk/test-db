@@ -78,6 +78,7 @@ showcaseHandler.put("/update", async (req, res) => {
           $set: {
             weight: data.weight,
             draft: data.draft,
+            featured: data.featured,
           },
         },
       },

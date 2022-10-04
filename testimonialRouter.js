@@ -68,7 +68,7 @@ testimonialHandler.patch("/update/:id", async (req, res) => {
 testimonialHandler.put("/update", async (req, res) => {
   await dbConnect();
 
-  const dataArray = req.body.draftData.map((data) => {
+  const dataArray = req.body.draftData.map((data, i) => {
     return {
       updateOne: {
         filter: { _id: data._id },
