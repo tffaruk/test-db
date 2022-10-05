@@ -79,6 +79,7 @@ showcaseHandler.put("/update", async (req, res) => {
             weight: data.weight,
             draft: data.draft,
             featured: data.featured,
+            title: data.title,
           },
         },
       },
