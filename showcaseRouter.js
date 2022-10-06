@@ -80,6 +80,8 @@ showcaseHandler.put("/update", async (req, res) => {
             draft: data.draft,
             featured: data.featured,
             title: data.title,
+            theme: data.theme,
+            website: data.website,
           },
         },
       },
