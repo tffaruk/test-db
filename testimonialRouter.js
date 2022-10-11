@@ -30,9 +30,11 @@ testimonialHandler.get("/", async (req, res) => {
         error: "the server side error",
       });
     } else {
-      console.log(data);
       res.status(200).json({
-        result: data,
+        result: {
+          draft: data.filter((d) => d.draft),
+          undraft: data.filter((d) => !d.draft),
+        },
         message: "data get succesfully",
       });
     }
@@ -81,13 +83,11 @@ testimonialHandler.put("/update", async (req, res) => {
       },
     };
   });
-  console.log(dataArray);
 
   await Testimonial.bulkWrite(dataArray, function (err, result) {
     if (err) {
       res.send(err);
     } else {
-      console.log(result);
       res.send(result);
     }
   });
