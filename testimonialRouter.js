@@ -24,7 +24,23 @@ testimonialHandler.post("/", async (req, res) => {
 
 testimonialHandler.get("/", async (req, res) => {
   await dbConnect();
-  testimonialHandler;
+  await Testimonial.find({}).exec((err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "the server side error",
+      });
+    } else {
+      console.log(data);
+      res.status(200).json({
+        result: data,
+        result: {
+          draft: data.filter((d) => d.draft),
+          undraft: data.filter((d) => !d.draft),
+        },
+        message: "data get succesfully",
+      });
+    }
+  });
 });
 
 // Update field
@@ -78,9 +94,5 @@ testimonialHandler.put("/update", async (req, res) => {
     }
   });
 });
-
-testimonialHandler.delete("/delete",(req,res)=>{
-  console.log(req.body)
-})
 
 module.exports = testimonialHandler;
