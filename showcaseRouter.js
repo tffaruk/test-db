@@ -116,7 +116,6 @@ showcaseHandler.get("/trash", async (req, res) => {
 
 // undo trash
 showcaseHandler.patch("/trash/:id", (req, res) => {
-  console.log(req.body);
   Showcase.updateOne(
     { _id: req.params.id },
 
