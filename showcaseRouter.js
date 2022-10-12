@@ -6,6 +6,7 @@ const showcaseHandler = express.Router();
 require("dotenv").config();
 
 showcaseHandler.post("/", async (req, res) => {
+  console.log(req.body);
   await dbConnect();
   const newData = new Showcase(req.body);
   newData.save(req.body, (error) => {
@@ -24,13 +25,12 @@ showcaseHandler.post("/", async (req, res) => {
 
 showcaseHandler.get("/", async (req, res) => {
   await dbConnect();
-  await Showcase.find({}).exec((err, data) => {
+  await Showcase.find({ trash: false }).exec((err, data) => {
     if (err) {
       res.status(500).json({
         error: "the server side error",
       });
     } else {
-      console.log(data);
       res.status(200).json({
         result: data,
         message: "data get succesfully",
@@ -82,27 +82,64 @@ showcaseHandler.put("/update", async (req, res) => {
             title: data.title,
             theme: data.theme,
             website: data.website,
+            trash: data.trash,
           },
         },
       },
     };
   });
-  console.log(dataArray);
 
   await Showcase.bulkWrite(dataArray, function (err, result) {
     if (err) {
       res.send(err);
     } else {
-      console.log(result);
       res.send(result);
     }
   });
 });
 
-module.exports = showcaseHandler;
+// get trash data
+showcaseHandler.get("/trash", async (req, res) => {
+  await Showcase.find({ trash: true }).exec((err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "the server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "data get succesfully",
+      });
+    }
+  });
+});
 
-// showcaseHandler.put("/update", async (req, res) => {
-//   await dbConnect();
+// undo trash
+showcaseHandler.patch("/trash/:id", (req, res) => {
+  console.log(req.body);
+  Showcase.updateOne(
+    { _id: req.params.id },
+
+    {
+      $set: {
+        trash: req.body.trash,
+      },
+    },
+    (err) => {
+      if (err) {
+        res.status(500).json({
+          error: "the server side error",
+        });
+      } else {
+        res.status(200).json({
+          message: "data update succesfully",
+        });
+      }
+    }
+  ).clone();
+});
+
+module.exports = showcaseHandler;
 
 //   console.log(req.body.draft);
 
@@ -126,7 +163,7 @@ module.exports = showcaseHandler;
 //         });
 //       }
 //     }
-//   ).clone();
+//   ).clone())}
 
 //   // await Showcase.bulkWrite(
 //   //   [
@@ -170,5 +207,3 @@ module.exports = showcaseHandler;
 // );
 
 // add a new field
-
-module.exports = showcaseHandler;
