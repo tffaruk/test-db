@@ -22,6 +22,9 @@ const showcaseSchema = mongoose.Schema({
   trash: {
     type: Boolean,
   },
+  published: {
+    type: Boolean,
+  },
   weight: {
     type: Number,
   },
