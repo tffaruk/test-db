@@ -39,8 +39,6 @@ showcaseHandler.get("/", async (req, res) => {
   });
 });
 
-// Update field
-// showcaseHandler.put("/update", async (req, res) => {
 //   console.log(req.body);
 //   await dbConnect();
 //   req.body.draftData.map((data, i) =>
@@ -70,7 +68,7 @@ showcaseHandler.get("/", async (req, res) => {
 showcaseHandler.put("/update", async (req, res) => {
   await dbConnect();
 
-  const dataArray = req.body.draftData.map((data) => {
+  const dataArray = req.body.data.map((data) => {
     return {
       updateOne: {
         filter: { _id: data._id },
@@ -98,6 +96,7 @@ showcaseHandler.put("/update", async (req, res) => {
     }
   });
 });
+// trash undo
 
 // get trash data
 showcaseHandler.get("/trash", async (req, res) => {
@@ -116,28 +115,32 @@ showcaseHandler.get("/trash", async (req, res) => {
 });
 
 // undo trash
-showcaseHandler.patch("/trash/:id", (req, res) => {
-  Showcase.updateOne(
-    { _id: req.params.id },
+showcaseHandler.put("/trash", async (req, res) => {
+  console.log(req.body);
+  await dbConnect();
 
-    {
-      $set: {
-        trash: req.body.trash,
+  const dataArray = req.body.updateTrash.map((data) => {
+    return {
+      updateOne: {
+        filter: { _id: data._id },
+        update: {
+          $set: {
+            trash: data.trash,
+          },
+        },
       },
-    },
-    (err) => {
-      if (err) {
-        res.status(500).json({
-          error: "the server side error",
-        });
-      } else {
-        res.status(200).json({
-          message: "data update succesfully",
-        });
-      }
+    };
+  });
+
+  await Showcase.bulkWrite(dataArray, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
     }
-  ).clone();
+  });
 });
+
 //
 // delete download field
 showcaseHandler.get("/delete/:id", async (req, res) => {
