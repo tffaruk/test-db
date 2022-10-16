@@ -40,9 +40,13 @@ const testimonialSchema = mongoose.Schema({
   weight: {
     type: Number,
   },
-  draft: {
+  published: {
     type: Boolean,
   },
+  trash: {
+    type: Boolean,
+  },
+
   date: {
     type: Date,
     default: Date.now(),

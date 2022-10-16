@@ -21,28 +21,38 @@ testimonialHandler.post("/", async (req, res) => {
     }
   });
 });
-
+// get all data
 testimonialHandler.get("/", async (req, res) => {
   await dbConnect();
-  await Testimonial.find({}).exec((err, data) => {
+  await Testimonial.find({ trash: false }).exec((err, data) => {
     if (err) {
       res.status(500).json({
         error: "the server side error",
       });
     } else {
-      console.log(data);
       res.status(200).json({
         result: data,
-        result: {
-          draft: data.filter((d) => d.draft),
-          undraft: data.filter((d) => !d.draft),
-        },
         message: "data get succesfully",
       });
     }
   });
 });
-
+// get trash data
+testimonialHandler.get("/trash", async (req, res) => {
+  await dbConnect();
+  await Testimonial.find({ trash: true }).exec((err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "the server side error",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "data get succesfully",
+      });
+    }
+  });
+});
 // Update field
 testimonialHandler.patch("/update/:id", async (req, res) => {
   await dbConnect();
@@ -69,17 +79,19 @@ testimonialHandler.patch("/update/:id", async (req, res) => {
   ).clone();
 });
 
+// update testimonial
 testimonialHandler.put("/update", async (req, res) => {
   await dbConnect();
 
-  const dataArray = req.body.draftData.map((data, i) => {
+  const dataArray = req.body.data.map((data, i) => {
     return {
       updateOne: {
         filter: { _id: data._id },
         update: {
           $set: {
             weight: data.weight,
-            draft: data.draft,
+            published: data.published,
+            trash: data.trash,
           },
         },
       },
@@ -93,6 +105,49 @@ testimonialHandler.put("/update", async (req, res) => {
       res.send(result);
     }
   });
+});
+
+// undo trash
+testimonialHandler.put("/trash", async (req, res) => {
+  await dbConnect();
+  const data = req.body.updateTrash.filter((data) => data.id);
+  console.log(data);
+  const dataArray = data.map((data) => {
+    return {
+      updateOne: {
+        filter: { _id: data.id },
+        update: {
+          $set: {
+            trash: data.trash,
+          },
+        },
+      },
+    };
+  });
+
+  await Testimonial.bulkWrite(dataArray, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// delete testimonial
+testimonialHandler.get("/delete/:id", async (req, res) => {
+  await dbConnect();
+  console.log(req.params.id);
+  Testimonial.deleteOne({ _id: req.params.id }, function (err, data) {
+    if (!err) {
+      console.log(data);
+
+      console.log("member successfully deleted");
+    } else {
+      console.log(err);
+    }
+  });
+  res.redirect("/");
 });
 
 module.exports = testimonialHandler;
