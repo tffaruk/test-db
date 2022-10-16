@@ -39,32 +39,6 @@ showcaseHandler.get("/", async (req, res) => {
   });
 });
 
-//   console.log(req.body);
-//   await dbConnect();
-//   req.body.draftData.map((data, i) =>
-//     Showcase.updateOne(
-//       { _id: data._id },
-
-//       {
-//         $set: {
-//           weight: i,
-//           draft: data.draft,
-//         },
-//       },
-//       (err) => {
-//         if (err) {
-//           res.status(500).json({
-//             error: "the server side error",
-//           });
-//         } else {
-//           res.status(200).json({
-//             message: "data update succesfully",
-//           });
-//         }
-//       }
-//     ).clone()
-//   );
-// });
 showcaseHandler.put("/update", async (req, res) => {
   await dbConnect();
 
@@ -116,13 +90,13 @@ showcaseHandler.get("/trash", async (req, res) => {
 
 // undo trash
 showcaseHandler.put("/trash", async (req, res) => {
-  console.log(req.body);
   await dbConnect();
-
-  const dataArray = req.body.updateTrash.map((data) => {
+  const data = req.body.updateTrash.filter((data) => data.id);
+  console.log(data);
+  const dataArray = data.map((data) => {
     return {
       updateOne: {
-        filter: { _id: data._id },
+        filter: { _id: data.id },
         update: {
           $set: {
             trash: data.trash,
