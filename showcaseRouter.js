@@ -114,44 +114,23 @@ showcaseHandler.put("/trash", async (req, res) => {
     }
   });
 });
-// delete trash data
-showcaseHandler.put("/delete", async (req, res) => {
-  await dbConnect();
-  const data = req.body.deleteData.filter((data) => data.id);
-  console.log(data);
-  const dataArray = data.map((data) => {
-    return {
-      deleteOne: {
-        filter: { _id: data.id },
-      },
-    };
-  });
-
-  await Showcase.bulkWrite(dataArray, function (err, result) {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
 
 //
 // delete download field
-// showcaseHandler.get("/delete/", async (req, res) => {
-//   await dbConnect();
-//   console.log(req.params.name);
-//   Showcase.deleteOne({ _id: req.params.id }, function (err, data) {
-//     if (!err) {
-//       console.log(data);
+showcaseHandler.get("/delete/:id", async (req, res) => {
+  await dbConnect();
+  console.log(req.params.id);
+  Showcase.deleteOne({ _id: req.params.id }, function (err, data) {
+    if (!err) {
+      console.log(data);
 
-//       console.log("member successfully deleted");
-//     } else {
-//       console.log(err);
-//     }
-//   });
-//   res.redirect("/");
-// });
+      console.log("member successfully deleted");
+    } else {
+      console.log(err);
+    }
+  });
+  res.redirect("/");
+});
 
 module.exports = showcaseHandler;
 
