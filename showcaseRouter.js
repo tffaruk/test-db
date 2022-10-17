@@ -55,7 +55,7 @@ showcaseHandler.put("/update", async (req, res) => {
             theme: data.theme,
             website: data.website,
             trash: data.trash,
-            published: !data.draft,
+            published: data.published,
           },
         },
       },
