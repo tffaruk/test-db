@@ -6,6 +6,7 @@ const testimonialHandler = express.Router();
 require("dotenv").config();
 
 testimonialHandler.post("/", async (req, res) => {
+  console.log(req.body);
   await dbConnect();
   const newData = new Testimonial(req.body);
   newData.save(req.body, (error) => {

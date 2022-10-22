@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const testimonialHandler = require("./testimonialRouter");
 
 const showcaseHandler = require("./showcaseRouter");
+const adminHandler = require("./adminRouter");
 
 require("dotenv").config();
 app.use(cors());
@@ -29,3 +30,4 @@ app.listen(process.env.PORT || port);
 
 app.use("/showcase", showcaseHandler);
 app.use("/testimonial", testimonialHandler);
+app.use("/admin", adminHandler);
