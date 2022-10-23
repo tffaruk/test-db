@@ -138,8 +138,8 @@ testimonialHandler.put("/trash", async (req, res) => {
 // delete testimonial
 testimonialHandler.get("/delete/:id", async (req, res) => {
   await dbConnect();
-  console.log(req.params.id);
-  Testimonial.deleteOne({ _id: req.params.id }, function (err, data) {
+
+  Testimonial.deleteOne({ _id: req.params.id }, (err, data) => {
     if (!err) {
       console.log(data);
 

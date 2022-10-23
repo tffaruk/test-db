@@ -4,6 +4,7 @@ const Admin = require("./adminModel");
 const adminHandler = express.Router();
 
 adminHandler.post("/", async (req, res) => {
+  console.log(req.body);
   await dbConnect();
   const newData = new Admin(req.body);
   newData.save(req.body, (error) => {
@@ -35,5 +36,44 @@ adminHandler.get("/", async (req, res) => {
     }
   });
 });
+adminHandler.get("/delete/:id", async (req, res) => {
+  await dbConnect();
 
+  Admin.deleteOne({ _id: req.params.id }, (err, data) => {
+    if (!err) {
+      console.log(data);
+
+      console.log("member successfully deleted");
+    } else {
+      console.log(err);
+    }
+  });
+  res.redirect("/");
+});
+
+adminHandler.put("/update", async (req, res) => {
+  await dbConnect();
+
+  const dataArray = req.body.data.map((data, i) => {
+    return {
+      updateOne: {
+        filter: { _id: data._id },
+        update: {
+          $set: {
+            weight: data.weight,
+            role: data.role,
+          },
+        },
+      },
+    };
+  });
+
+  await Admin.bulkWrite(dataArray, function (err, result) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
 module.exports = adminHandler;
