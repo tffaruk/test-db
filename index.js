@@ -7,6 +7,7 @@ const testimonialHandler = require("./testimonialRouter");
 
 const showcaseHandler = require("./showcaseRouter");
 const adminHandler = require("./adminRouter");
+const reviewHandler = require("./reviewRouter");
 
 require("dotenv").config();
 app.use(cors());
@@ -31,3 +32,4 @@ app.listen(process.env.PORT || port);
 app.use("/showcase", showcaseHandler);
 app.use("/testimonial", testimonialHandler);
 app.use("/admin", adminHandler);
+app.use("/review", reviewHandler);
