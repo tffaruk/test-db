@@ -1,11 +1,13 @@
 const express = require("express");
 const dbConnect = require("./dbConnect");
 const Review = require("./reviewModel");
+const Showcase = require("./showcaseModel");
 const reviewHandler = express.Router();
 require("dotenv").config();
 
 reviewHandler.post("/", async (req, res) => {
   await dbConnect();
+
   const newData = new Review(req.body);
   newData.save(req.body, (error) => {
     if (error) {
@@ -14,6 +16,31 @@ reviewHandler.post("/", async (req, res) => {
         error: "There is server side error",
       });
     } else {
+      if (req.body.website) {
+        Showcase.find({}).exec((err, data) => {
+          if (err) {
+            console.log(err);
+            res.status(500).json({
+              error: "There is server side error",
+            });
+          } else {
+            if (!data.map((data) => data.website).includes(req.body.website)) {
+              const event = {
+                title: req.body.websiteTitle,
+                website: req.body.website,
+                theme: req.body.theme,
+                slug: req.body.websiteTitle.toLowerCase(),
+                featured: false,
+                published: false,
+                trash: false,
+                weight: 0,
+              };
+              const newData = new Showcase(event);
+              newData.save(event);
+            }
+          }
+        });
+      }
       res.status(200).json({
         message: "Add data successfully",
       });
@@ -74,6 +101,7 @@ reviewHandler.put("/update", async (req, res) => {
           $set: {
             weight: data.weight,
             published: data.published,
+            trash: data.trash,
           },
         },
       },
@@ -107,7 +135,7 @@ reviewHandler.get("/trash", async (req, res) => {
 reviewHandler.put("/trash", async (req, res) => {
   await dbConnect();
   const data = req.body.updateTrash.filter((data) => data.id);
-  console.log(data);
+  // console.log(data);
   const dataArray = data.map((data) => {
     return {
       updateOne: {
