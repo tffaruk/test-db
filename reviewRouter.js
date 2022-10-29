@@ -53,10 +53,7 @@ reviewHandler.get("/", async (req, res) => {
 
   let theme = req.query.theme || "";
 
-  theme =
-    theme === ""
-      ? ""
-      : req.query.theme.charAt(0).toUpperCase() + req.query.theme.slice(1);
+  theme = theme === "" ? "" : req.query.theme;
 
   if (theme) {
     await Review.find({ trash: false })
