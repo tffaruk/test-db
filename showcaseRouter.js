@@ -6,7 +6,6 @@ const showcaseHandler = express.Router();
 require("dotenv").config();
 
 showcaseHandler.post("/", async (req, res) => {
-  console.log(req.body);
   await dbConnect();
   const newData = new Showcase(req.body);
   newData.save(req.body, (error) => {
@@ -34,6 +33,7 @@ showcaseHandler.get("/", async (req, res) => {
       res.status(200).json({
         result: data,
         message: "data get succesfully",
+        isEmpty: data.length > 0 ? false : true,
       });
     }
   });
@@ -82,6 +82,7 @@ showcaseHandler.get("/trash", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
+        isEmpty: data.length > 0 ? false : true,
         message: "data get succesfully",
       });
     }

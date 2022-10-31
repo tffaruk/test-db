@@ -50,15 +50,22 @@ reviewHandler.post("/", async (req, res) => {
 
 reviewHandler.get("/", async (req, res) => {
   await dbConnect();
+  const total = await Review.find({ trash: false });
+  console.log(total.length);
 
+  let page = parseInt(req.query.page) - 1 || 0;
+
+  let limit = 5;
   let theme = req.query.theme || "";
 
-  theme = theme === "" ? "" : req.query.theme;
+  // theme = theme === "" ? "" : req.query.theme;
 
   if (theme) {
     await Review.find({ trash: false })
       .where("theme")
       .in(theme)
+      .skip(page * limit)
+      .limit(limit)
       .exec((err, data) => {
         if (err) {
           res.status(500).json({
@@ -68,22 +75,28 @@ reviewHandler.get("/", async (req, res) => {
           res.status(200).json({
             result: data,
             message: "data get succesfully",
+            total: total.length,
           });
         }
       });
   } else {
-    await Review.find({ trash: false }).exec((err, data) => {
-      if (err) {
-        res.status(500).json({
-          error: "the server side error",
-        });
-      } else {
-        res.status(200).json({
-          result: data,
-          message: "data get succesfully",
-        });
-      }
-    });
+    await Review.find({ trash: false })
+      .skip(page * limit)
+      .limit(limit)
+      .exec((err, data) => {
+        if (err) {
+          res.status(500).json({
+            error: "the server side error",
+          });
+        } else {
+          res.status(200).json({
+            result: data,
+            isEmpty: data.length > 0 ? false : true,
+            message: "data get succesfully",
+            total: total.length,
+          });
+        }
+      });
   }
 });
 
@@ -124,6 +137,7 @@ reviewHandler.get("/trash", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
+        isEmpty: data.length > 0 ? false : true,
         message: "data get succesfully",
       });
     }

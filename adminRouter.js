@@ -31,6 +31,7 @@ adminHandler.get("/", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
+        isEmpty: data.length > 0 ? false : true,
         message: "data get succesfully",
       });
     }

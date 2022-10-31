@@ -6,7 +6,6 @@ const testimonialHandler = express.Router();
 require("dotenv").config();
 
 testimonialHandler.post("/", async (req, res) => {
-  console.log(req.body);
   await dbConnect();
   const newData = new Testimonial(req.body);
   newData.save(req.body, (error) => {
@@ -33,6 +32,7 @@ testimonialHandler.get("/", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
+        isEmpty: data.length > 0 ? false : true,
         message: "data get succesfully",
       });
     }
@@ -49,6 +49,7 @@ testimonialHandler.get("/trash", async (req, res) => {
     } else {
       res.status(200).json({
         result: data,
+        isEmpty: data.length > 0 ? false : true,
         message: "data get succesfully",
       });
     }
