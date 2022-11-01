@@ -51,9 +51,7 @@ reviewHandler.post("/", async (req, res) => {
 reviewHandler.get("/", async (req, res) => {
   await dbConnect();
   const total = await Review.find({ trash: false });
-
   let page = parseInt(req.query.page) - 1 || 0;
-
   let limit = 5;
   let theme = req.query.theme || "";
 

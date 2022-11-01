@@ -7,6 +7,7 @@ require("dotenv").config();
 
 showcaseHandler.post("/", async (req, res) => {
   await dbConnect();
+
   const newData = new Showcase(req.body);
   newData.save(req.body, (error) => {
     if (error) {
@@ -24,19 +25,26 @@ showcaseHandler.post("/", async (req, res) => {
 
 showcaseHandler.get("/", async (req, res) => {
   await dbConnect();
-  await Showcase.find({ trash: false }).exec((err, data) => {
-    if (err) {
-      res.status(500).json({
-        error: "the server side error",
-      });
-    } else {
-      res.status(200).json({
-        result: data,
-        message: "data get succesfully",
-        isEmpty: data.length > 0 ? false : true,
-      });
-    }
-  });
+  const total = await Showcase.find({ trash: false });
+  let page = parseInt(req.query.page) - 1 || 0;
+  let limit = 10;
+  await Showcase.find({ trash: false })
+    .skip(page * limit)
+    .limit(limit)
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).json({
+          error: "the server side error",
+        });
+      } else {
+        res.status(200).json({
+          result: data,
+          message: "data get succesfully",
+          isEmpty: data.length > 0 ? false : true,
+          total: total.length,
+        });
+      }
+    });
 });
 
 showcaseHandler.put("/update", async (req, res) => {

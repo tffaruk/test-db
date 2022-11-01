@@ -24,19 +24,27 @@ testimonialHandler.post("/", async (req, res) => {
 // get all data
 testimonialHandler.get("/", async (req, res) => {
   await dbConnect();
-  await Testimonial.find({ trash: false }).exec((err, data) => {
-    if (err) {
-      res.status(500).json({
-        error: "the server side error",
-      });
-    } else {
-      res.status(200).json({
-        result: data,
-        isEmpty: data.length > 0 ? false : true,
-        message: "data get succesfully",
-      });
-    }
-  });
+  const total = await Testimonial.find({ trash: false });
+  let page = parseInt(req.query.page) - 1 || 0;
+  let limit = 5;
+
+  await Testimonial.find({ trash: false })
+    .skip(page * limit)
+    .limit(limit)
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).json({
+          error: "the server side error",
+        });
+      } else {
+        res.status(200).json({
+          result: data,
+          isEmpty: data.length > 0 ? false : true,
+          message: "data get succesfully",
+          total: total.length,
+        });
+      }
+    });
 });
 // get trash data
 testimonialHandler.get("/trash", async (req, res) => {
