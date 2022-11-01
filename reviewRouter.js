@@ -73,6 +73,7 @@ reviewHandler.get("/", async (req, res) => {
             result: data,
             message: "data get succesfully",
             total: total.length,
+            isEmpty: data.length > 0 ? false : true,
           });
         }
       });
