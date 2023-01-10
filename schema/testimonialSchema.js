@@ -46,7 +46,6 @@ const testimonialSchema = mongoose.Schema({
   trash: {
     type: Boolean,
   },
-
   date: {
     type: Date,
     default: Date.now(),

@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
 
-const testimonialSchema = mongoose.Schema({
+const reviewSchema = mongoose.Schema({
   name: {
-    type: String,
-  },
-  profession: {
     type: String,
   },
   email: {
@@ -28,9 +25,6 @@ const testimonialSchema = mongoose.Schema({
   usertype: {
     type: String,
   },
-  project: {
-    type: String,
-  },
   weight: {
     type: Number,
   },
@@ -46,4 +40,4 @@ const testimonialSchema = mongoose.Schema({
   },
 });
 
-module.exports = testimonialSchema;
+module.exports = reviewSchema;

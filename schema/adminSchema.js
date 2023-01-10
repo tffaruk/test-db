@@ -14,4 +14,5 @@ const adminSchema = maongoose.Schema({
     required: true,
   },
 });
+
 module.exports = adminSchema;

@@ -1,32 +1,29 @@
 const mongoose = require("mongoose");
 
-const showcaseSchema = mongoose.Schema({
-  title: {
+const bundleReviewSchema = mongoose.Schema({
+  name: {
     type: String,
   },
-  slug: {
+  email: {
     type: String,
   },
-  website: {
+  subject: {
     type: String,
   },
-  theme: {
+  rating: {
+    type: Number,
+  },
+  feedback: {
     type: String,
   },
-  featured: {
-    type: Boolean,
-  },
-  draft: {
-    type: Boolean,
-  },
-  trash: {
-    type: Boolean,
+  weight: {
+    type: Number,
   },
   published: {
     type: Boolean,
   },
-  weight: {
-    type: Number,
+  trash: {
+    type: Boolean,
   },
   date: {
     type: Date,
@@ -34,4 +31,4 @@ const showcaseSchema = mongoose.Schema({
   },
 });
 
-module.exports = showcaseSchema;
+module.exports = bundleReviewSchema;
