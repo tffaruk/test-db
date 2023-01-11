@@ -8,7 +8,7 @@ const showcaseController = require("../controller/showcaseController");
 //  insert and get showcase data
 showcaseHandler
   .route("/")
-  .post(checkToken, showcaseController.postShowcase)
+  .post( showcaseController.postShowcase)
   .get( showcaseController.getAllShowcase);
 
 // update Showcase data
