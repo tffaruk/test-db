@@ -11,7 +11,6 @@ const deletedShowcaseSchema = maongoose.Schema({
   },
   generator: {
     type: String,
-    required: true,
   },
   status: {
     type: String,
