@@ -9,7 +9,7 @@ const showcaseController = require("../controller/showcaseController");
 showcaseHandler
   .route("/")
   .post(checkToken, showcaseController.postShowcase)
-  .get(checkToken, showcaseController.getAllShowcase);
+  .get( showcaseController.getAllShowcase);
 
 // update Showcase data
 showcaseHandler.put("/update", checkToken, showcaseController.updateShowcase);
