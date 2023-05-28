@@ -12,7 +12,9 @@ const adminHandler = require("./router/adminRouter");
 const { dbConnect } = require("./dbConnect");
 const deletedShowcaseHandler = require("./router/deletedShowcaseRouter");
 require("dotenv").config();
+const { IPinfoWrapper } = require("node-ipinfo");
 
+const ipinfo = new IPinfoWrapper("d23d180fe922b3");
 // middleware
 app.use(cors());
 app.use(express.json({ limit: "50mb", extended: true }));
@@ -37,7 +39,10 @@ app.use("/deleted-showcase", deletedShowcaseHandler);
 
 // local api
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log(ip)
+
+  res.send("Hello World!",ip);
 });
 
 const port = process.env.PORT;
