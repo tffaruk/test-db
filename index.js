@@ -14,7 +14,7 @@ const deletedShowcaseHandler = require("./router/deletedShowcaseRouter");
 require("dotenv").config();
 const { IPinfoWrapper } = require("node-ipinfo");
 
-const ipinfo = new IPinfoWrapper("d23d180fe922b3");
+const ipinfo = new IPinfoWrapper();
 // middleware
 app.use(cors());
 app.use(express.json({ limit: "50mb", extended: true }));
