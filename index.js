@@ -14,7 +14,7 @@ const deletedShowcaseHandler = require("./router/deletedShowcaseRouter");
 require("dotenv").config();
 const { IPinfoWrapper } = require("node-ipinfo");
 
-const ipinfo = new IPinfoWrapper();
+const ipinfo = new IPinfoWrapper("d23d180fe922b3");
 // middleware
 app.use(cors());
 app.use(express.json({ limit: "50mb", extended: true }));
@@ -38,13 +38,13 @@ app.use("/admin", adminHandler);
 app.use("/deleted-showcase", deletedShowcaseHandler);
 
 // local api
-app.get("/", async(req, res) => {
+app.get("/", async (req, res) => {
   // const ip = "116.206.89.13";
-  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  console.log(ip)
-  const response=await ipinfo.lookupIp(ip)
+  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  console.log(ip);
+  const response = await ipinfo.lookupIp(ip);
 
-res.send(response.country)
+  res.send(response.country);
 });
 
 const port = process.env.PORT;
