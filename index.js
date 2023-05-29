@@ -38,21 +38,13 @@ app.use("/admin", adminHandler);
 app.use("/deleted-showcase", deletedShowcaseHandler);
 
 // local api
-app.get("/", (req, res) => {
+app.get("/", async(req, res) => {
   // const ip = "116.206.89.13";
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log(ip)
-  ipinfo.lookupIp(ip).then((response) => {
-    // country code, e.g. 'US'
-    console.log(response.countryCode);
- 
-    // country name, e.g. 'United States'
-    console.log(response.country);
+  const response=await ipinfo.lookupIp(ip)
 
 res.send(response.country)
-})
-
-
 });
 
 const port = process.env.PORT;
